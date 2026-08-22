@@ -218,6 +218,134 @@ def read_root():
                 margin-bottom: 3rem;
             }
 
+            .shop-section {
+                width: min(1100px, calc(100vw - 2rem));
+                margin: 0 auto 3rem;
+                padding: 0.5rem 0 0;
+            }
+
+            .shop-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: end;
+                gap: 1rem;
+                margin-bottom: 1.25rem;
+            }
+
+            .shop-header h2 {
+                margin: 0;
+                font-size: clamp(1.8rem, 4vw, 2.5rem);
+                letter-spacing: 0.03em;
+                color: var(--text);
+            }
+
+            .shop-badge {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                padding: 0.5rem 0.9rem;
+                border-radius: 999px;
+                background: rgba(56, 189, 248, 0.12);
+                color: #7dd3fc;
+                font-size: 0.75rem;
+                font-weight: 700;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+                border: 1px solid rgba(125, 211, 252, 0.3);
+            }
+
+            .shop-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+                gap: 1.25rem;
+            }
+
+            .product-card {
+                background: linear-gradient(180deg, rgba(30, 41, 59, 0.82), rgba(15, 23, 42, 0.9));
+                border: 1px solid rgba(148, 163, 184, 0.16);
+                border-radius: 22px;
+                padding: 1.1rem;
+                box-shadow: 0 18px 40px rgba(15, 23, 42, 0.2);
+                display: flex;
+                flex-direction: column;
+                min-height: 280px;
+            }
+
+            body.dark-mode .product-card {
+                background: linear-gradient(180deg, rgba(15, 23, 42, 0.88), rgba(30, 41, 59, 0.9));
+            }
+
+            .product-art {
+                height: 150px;
+                border-radius: 16px;
+                margin-bottom: 1rem;
+                background: linear-gradient(135deg, rgba(56, 189, 248, 0.28), rgba(139, 92, 246, 0.28));
+                border: 1px solid rgba(148, 163, 184, 0.18);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 2.4rem;
+            }
+
+            .product-card h3 {
+                margin: 0 0 0.45rem;
+                font-size: 1.2rem;
+                color: var(--text);
+            }
+
+            .product-card p {
+                margin: 0 0 1rem;
+                color: var(--muted);
+                line-height: 1.55;
+                flex: 1;
+            }
+
+            .product-meta {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 0.75rem;
+                margin-bottom: 1rem;
+            }
+
+            .price {
+                font-size: 1.1rem;
+                font-weight: 800;
+                color: #7dd3fc;
+            }
+
+            .tag {
+                padding: 0.35rem 0.55rem;
+                border-radius: 999px;
+                background: rgba(148, 163, 184, 0.08);
+                border: 1px solid rgba(148, 163, 184, 0.15);
+                color: var(--muted);
+                font-size: 0.7rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.06em;
+            }
+
+            .buy-btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                padding: 0.8rem 1rem;
+                border-radius: 14px;
+                background: linear-gradient(135deg, var(--accent), var(--accent-2));
+                color: #0f172a;
+                text-decoration: none;
+                font-weight: 800;
+                transition: transform 0.15s ease, box-shadow 0.15s ease;
+                box-shadow: 0 12px 24px rgba(56, 189, 248, 0.22);
+            }
+
+            .buy-btn:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 16px 30px rgba(139, 92, 246, 0.24);
+            }
+
             .app-card {
                 border-radius: 16px;
                 background: linear-gradient(180deg, rgba(248,250,252,0.8), rgba(226,232,240,0.9));
@@ -861,6 +989,48 @@ def read_root():
                 </div>
             </div>
         </div>
+
+        <section class="shop-section" aria-label="Shop products">
+            <div class="shop-header">
+                <h2>Shop</h2>
+                <span class="shop-badge">Digital Packs</span>
+            </div>
+
+            <div class="shop-grid">
+                <article class="product-card">
+                    <div class="product-art">🖌️</div>
+                    <h3>Krita Brush Pack</h3>
+                    <p>Handmade brush textures for sketching, shading, and painting with a clean creator style.</p>
+                    <div class="product-meta">
+                        <span class="price">$9</span>
+                        <span class="tag">Krita</span>
+                    </div>
+                    <a href="#" class="buy-btn">Buy now</a>
+                </article>
+
+                <article class="product-card">
+                    <div class="product-art">🎨</div>
+                    <h3>Aseprite Palette</h3>
+                    <p>A bold palette set for game art, UI design, and stylized pixel work.</p>
+                    <div class="product-meta">
+                        <span class="price">$6</span>
+                        <span class="tag">Aseprite</span>
+                    </div>
+                    <a href="#" class="buy-btn">Buy now</a>
+                </article>
+
+                <article class="product-card">
+                    <div class="product-art">📦</div>
+                    <h3>Starter Bundle</h3>
+                    <p>A bundle of brushes, colours, and resources for new creators getting started.</p>
+                    <div class="product-meta">
+                        <span class="price">$14</span>
+                        <span class="tag">Bundle</span>
+                    </div>
+                    <a href="#" class="buy-btn">Buy now</a>
+                </article>
+            </div>
+        </section>
 
         <div class="sonic-section">
             <button class="sonic-toggle-btn" onclick="toggleSonicGames()">
