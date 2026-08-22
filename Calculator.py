@@ -37,7 +37,24 @@ def read_root():
                 --text: #1e293b;
                 --muted: #64748b;
                 --border: rgba(100, 116, 139, 0.2);
+                --card-bg: rgba(248, 250, 252, 0.8);
+                --header-bg: rgba(255, 255, 255, 0.95);
+                --page-glow: rgba(56, 189, 248, 0.15);
                 font-family: 'Inter', system-ui, sans-serif;
+            }
+
+            body.dark-mode {
+                --bg: #020817;
+                --surface: #0f172a;
+                --surface-2: #1e293b;
+                --accent: #7dd3fc;
+                --accent-2: #a78bfa;
+                --text: #e2e8f0;
+                --muted: #94a3b8;
+                --border: rgba(148, 163, 184, 0.2);
+                --card-bg: rgba(15, 23, 42, 0.9);
+                --header-bg: rgba(2, 8, 23, 0.82);
+                --page-glow: rgba(125, 211, 252, 0.12);
             }
 
             .site-header {
@@ -53,15 +70,44 @@ def read_root():
                 box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             }
 
+            body.dark-mode .site-header {
+                background: rgba(2, 8, 23, 0.82);
+                border-bottom-color: rgba(148, 163, 184, 0.18);
+                box-shadow: 0 2px 10px rgba(2, 6, 23, 0.4);
+            }
+
             .logo-container {
                 display: flex;
                 align-items: center;
+                justify-content: space-between;
+                gap: 1rem;
             }
 
             .site-logo {
                 height: 60px;
                 width: auto;
                 object-fit: contain;
+            }
+
+            .theme-toggle {
+                border: 1px solid var(--border);
+                background: rgba(148, 163, 184, 0.12);
+                color: var(--text);
+                width: 46px;
+                height: 46px;
+                border-radius: 50%;
+                cursor: pointer;
+                font-size: 1.2rem;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+            }
+
+            .theme-toggle:hover {
+                transform: translateY(-1px);
+                background: rgba(59, 130, 246, 0.12);
+                border-color: rgba(59, 130, 246, 0.4);
             }
 
             * { box-sizing: border-box; }
@@ -71,6 +117,13 @@ def read_root():
                 background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
                 color: var(--text);
                 overflow-x: hidden;
+            }
+
+            body.dark-mode {
+                background: radial-gradient(circle at top, rgba(125, 211, 252, 0.12), transparent 32%),
+                            radial-gradient(circle at bottom right, rgba(167, 139, 250, 0.14), transparent 28%),
+                            linear-gradient(135deg, #020817 0%, #0f172a 100%);
+                color: var(--text);
             }
 
             .hero {
@@ -173,6 +226,19 @@ def read_root():
                 transition: transform 0.2s ease, box-shadow 0.2s ease;
             }
 
+            body.dark-mode .app-card,
+            body.dark-mode .sonic-card,
+            body.dark-mode .sonic-toggle-btn,
+            body.dark-mode .results-section,
+            body.dark-mode .calculator,
+            body.dark-mode .time-converter,
+            body.dark-mode .search-box,
+            body.dark-mode .time-input {
+                background: linear-gradient(180deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.9));
+                border-color: rgba(148, 163, 184, 0.2);
+                color: var(--text);
+            }
+
             .app-card:hover {
                 transform: translateY(-5px);
                 box-shadow: 0 15px 40px rgba(56, 189, 248, 0.15);
@@ -231,6 +297,10 @@ def read_root():
                 font-weight: 700;
                 color: var(--text);
                 transition: background 0.2s ease, transform 0.2s ease;
+            }
+
+            body.dark-mode .sonic-toggle-btn {
+                background: rgba(15, 23, 42, 0.9);
             }
 
             .sonic-toggle-btn:hover {
@@ -748,6 +818,7 @@ def read_root():
         <header class="site-header">
             <div class="logo-container">
                 <img src="/static/Untitled_design__2_2.04-removebg-preview.png" alt="Ace Hub Logo" class="site-logo" onerror="console.log('Logo failed to load')">
+                <button id="themeToggle" class="theme-toggle" type="button" aria-label="Switch to dark mode">🌙</button>
             </div>
         </header>
         <div class="hero">
@@ -942,9 +1013,27 @@ def read_root():
             const searchBox = document.getElementById('searchBox');
             const panelToggle = document.getElementById('panelToggle');
             const sidePanel = document.getElementById('sidePanel');
+            const themeToggle = document.getElementById('themeToggle');
             let expression = '';
             let justCalculated = false;
             let currentFilter = 'all';
+
+            function applyTheme(isDarkMode) {
+                document.body.classList.toggle('dark-mode', isDarkMode);
+                if (themeToggle) {
+                    themeToggle.textContent = isDarkMode ? '☀️' : '🌙';
+                    themeToggle.setAttribute('aria-label', isDarkMode ? 'Switch to light mode' : 'Switch to dark mode');
+                }
+                localStorage.setItem('ace-theme', isDarkMode ? 'dark' : 'light');
+            }
+
+            const savedTheme = localStorage.getItem('ace-theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            applyTheme(savedTheme ? savedTheme === 'dark' : prefersDark);
+
+            themeToggle.addEventListener('click', () => {
+                applyTheme(!document.body.classList.contains('dark-mode'));
+            });
 
             panelToggle.addEventListener('click', () => {
                 sidePanel.classList.toggle('active');
