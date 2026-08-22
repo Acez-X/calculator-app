@@ -222,6 +222,33 @@ def read_root():
                 width: min(1100px, calc(100vw - 2rem));
                 margin: 0 auto 3rem;
                 padding: 0.5rem 0 0;
+                display: none;
+            }
+
+            .shop-section.open {
+                display: block;
+            }
+
+            .shop-toggle {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5rem;
+                padding: 0.8rem 1.5rem;
+                border-radius: 999px;
+                border: 1px solid rgba(56, 189, 248, 0.38);
+                background: rgba(56, 189, 248, 0.08);
+                color: var(--text);
+                cursor: pointer;
+                font-size: 1rem;
+                font-weight: 700;
+                margin: 0 auto 1.5rem;
+                transition: all 0.2s ease;
+            }
+
+            .shop-toggle:hover {
+                background: rgba(56, 189, 248, 0.14);
+                transform: translateY(-1px);
             }
 
             .shop-header {
@@ -871,6 +898,14 @@ def read_root():
                 pointer-events: auto;
             }
 
+            body.dark-mode .side-panel {
+                background: linear-gradient(180deg, rgba(15, 23, 42, 0.98), rgba(2, 6, 23, 0.96));
+                border-left: 1px solid rgba(148, 163, 184, 0.25);
+                border-top: 1px solid rgba(148, 163, 184, 0.25);
+                border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+                box-shadow: -10px 0 28px rgba(2, 6, 23, 0.45);
+            }
+
             .side-panel.active {
                 transform: translateX(0);
             }
@@ -928,6 +963,13 @@ def read_root():
                 color: var(--text);
                 font-weight: 600;
                 transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+                box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+            }
+
+            body.dark-mode .side-panel-link {
+                background: rgba(148, 163, 184, 0.12);
+                border-color: rgba(148, 163, 184, 0.26);
+                color: #f8fafc;
             }
 
             .side-panel-link:hover {
@@ -990,7 +1032,9 @@ def read_root():
             </div>
         </div>
 
-        <section class="shop-section" aria-label="Shop products">
+        <button class="shop-toggle" onclick="toggleShop()" id="shopToggle">Open Shop</button>
+
+        <section class="shop-section" id="shopSection" aria-label="Shop products">
             <div class="shop-header">
                 <h2>Shop</h2>
                 <span class="shop-badge">Digital Packs</span>
@@ -1286,6 +1330,16 @@ def read_root():
                 const isHidden = sonicGrid.style.display === 'none' || sonicGrid.style.display === '';
                 sonicGrid.style.display = isHidden ? 'grid' : 'none';
                 icon.classList.toggle('open', isHidden);
+            }
+
+            function toggleShop() {
+                const shopSection = document.getElementById('shopSection');
+                const shopToggle = document.getElementById('shopToggle');
+                const isOpen = shopSection.classList.toggle('open');
+                shopToggle.textContent = isOpen ? 'Close Shop' : 'Open Shop';
+                if (isOpen) {
+                    shopSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
             }
 
             function convertTime() {
