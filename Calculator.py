@@ -1135,7 +1135,7 @@ def read_root():
             <div class="side-panel" id="sidePanel">
                 <h2>Follow Me</h2>
                 <div class="side-panel-links">
-                    <a href="https://www.youtube.com/@Ace-X" target="_blank" rel="noopener noreferrer" class="side-panel-link">
+                    <a href="https://www.youtube.com/@Acez-X" target="_blank" rel="noopener noreferrer" class="side-panel-link">
                         <span class="side-panel-icon">▶</span>
                         <span>YouTube</span>
                     </a>
