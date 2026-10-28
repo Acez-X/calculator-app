@@ -10,6 +10,10 @@ app.mount("/static", StaticFiles(directory="Static"), name="static")
 async def favicon():
     return FileResponse("Static/favicon.ico")
 
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy"}
+
 class CalculationRequest(BaseModel):
     expression: str
 
