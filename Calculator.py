@@ -10,6 +10,10 @@ app.mount("/static", StaticFiles(directory="Static"), name="static")
 async def favicon():
     return FileResponse("Static/favicon.ico")
 
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy"}
+
 class CalculationRequest(BaseModel):
     expression: str
 
@@ -149,6 +153,7 @@ def read_root():
             }
 
             .search-box {
+                display: block;
                 width: 100%;
                 max-width: 500px;
                 padding: 1rem 1.5rem;
@@ -157,7 +162,7 @@ def read_root():
                 border: 2px solid rgba(59, 130, 246, 0.3);
                 color: var(--text);
                 font-size: 1rem;
-                margin-bottom: 2rem;
+                margin: 0 auto 2rem;
                 transition: border-color 0.2s ease;
             }
 
@@ -995,18 +1000,18 @@ def read_root():
             <div class="hero-content">
                 <h1 class="brand">The Great Ace Hub</h1>
                 <p class="tagline">Your hub for amazing apps and tools. Discover, download, and create.</p>
-                <input type="text" class="search-box" id="searchBox" placeholder="Search apps..." onkeyup="filterApps(this.value)">
                 <button class="cta-button" onclick="showCalculator()">Use Calculator</button>
             </div>
         </div>
 
         <div class="apps-section">
             <h2>Featured Apps</h2>
+            <input type="text" class="search-box" id="searchBox" placeholder="Search apps...">
             <div class="tabs">
-                <button class="tab-btn active" onclick="filterApps('all')">All Apps</button>
-                <button class="tab-btn" onclick="filterApps('tools')">Tools</button>
-                <button class="tab-btn" onclick="filterApps('games')">Games</button>
-                <button class="tab-btn" onclick="filterApps('utilities')">Utilities</button>
+                <button class="tab-btn active" onclick="filterApps('all', this)">All Apps</button>
+                <button class="tab-btn" onclick="filterApps('tools', this)">Tools</button>
+                <button class="tab-btn" onclick="filterApps('games', this)">Games</button>
+                <button class="tab-btn" onclick="filterApps('utilities', this)">Utilities</button>
             </div>
             <div class="app-grid" id="appGrid">
                 <div class="app-card" data-category="tools">
@@ -1135,7 +1140,7 @@ def read_root():
             <div class="side-panel" id="sidePanel">
                 <h2>Follow Me</h2>
                 <div class="side-panel-links">
-                    <a href="https://www.youtube.com/@AceNov-X" target="_blank" rel="noopener noreferrer" class="side-panel-link">
+                    <a href="https://www.youtube.com/@Acez-X" target="_blank" rel="noopener noreferrer" class="side-panel-link">
                         <span class="side-panel-icon">▶</span>
                         <span>YouTube</span>
                     </a>
@@ -1269,16 +1274,7 @@ def read_root():
                 });
             });
 
-            searchBox.addEventListener('input', (e) => {
-                const searchTerm = e.target.value.toLowerCase();
-                const cards = document.querySelectorAll('.app-card');
-                cards.forEach(card => {
-                    const title = card.querySelector('.app-title').textContent.toLowerCase();
-                    const description = card.querySelector('.app-description').textContent.toLowerCase();
-                    const matches = title.includes(searchTerm) || description.includes(searchTerm);
-                    card.style.display = matches ? 'block' : 'none';
-                });
-            });
+            searchBox.addEventListener('input', applyAppFilters);
 
             // Time converter input Enter key support
             document.getElementById('timeValue').addEventListener('keydown', (event) => {
@@ -1287,21 +1283,24 @@ def read_root():
                 }
             });
 
-            function filterApps(category) {
-                currentFilter = category;
+            function applyAppFilters() {
+                const searchTerm = searchBox.value.trim().toLowerCase();
                 const cards = document.querySelectorAll('.app-card');
-                const buttons = document.querySelectorAll('.tab-btn');
-                
-                buttons.forEach(btn => btn.classList.remove('active'));
-                event.target.classList.add('active');
-                
                 cards.forEach(card => {
-                    if (category === 'all' || card.dataset.category === category) {
-                        card.style.display = 'block';
-                    } else {
-                        card.style.display = 'none';
-                    }
+                    const title = card.querySelector('.app-title').textContent.toLowerCase();
+                    const description = card.querySelector('.app-description').textContent.toLowerCase();
+                    const matchesCategory = currentFilter === 'all' || card.dataset.category === currentFilter;
+                    const matchesSearch = title.includes(searchTerm) || description.includes(searchTerm);
+                    card.style.display = matchesCategory && matchesSearch ? '' : 'none';
                 });
+            }
+
+            function filterApps(category, button) {
+                currentFilter = category;
+                const buttons = document.querySelectorAll('.tab-btn');
+                buttons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                applyAppFilters();
             }
 
             function showCalculator() {
@@ -1442,6 +1441,13 @@ def read_root():
             }
 
             document.addEventListener('keydown', (event) => {
+                if (event.target instanceof HTMLInputElement ||
+                    event.target instanceof HTMLTextAreaElement ||
+                    event.target instanceof HTMLSelectElement ||
+                    event.target.isContentEditable) {
+                    return;
+                }
+
                 const accepted = ['0','1','2','3','4','5','6','7','8','9','+','-','*','/','^','(',')','.','=','Enter','Escape','Delete','Backspace'];
                 if (!accepted.includes(event.key)) {
                     return;
