@@ -999,7 +999,7 @@ def read_root():
             <div class="hero-content">
                 <h1 class="brand">The Great Ace Hub</h1>
                 <p class="tagline">Your hub for amazing apps and tools. Discover, download, and create.</p>
-                <input type="text" class="search-box" id="searchBox" placeholder="Search apps..." onkeyup="filterApps(this.value)">
+                <input type="text" class="search-box" id="searchBox" placeholder="Search apps...">
                 <button class="cta-button" onclick="showCalculator()">Use Calculator</button>
             </div>
         </div>
@@ -1007,10 +1007,10 @@ def read_root():
         <div class="apps-section">
             <h2>Featured Apps</h2>
             <div class="tabs">
-                <button class="tab-btn active" onclick="filterApps('all')">All Apps</button>
-                <button class="tab-btn" onclick="filterApps('tools')">Tools</button>
-                <button class="tab-btn" onclick="filterApps('games')">Games</button>
-                <button class="tab-btn" onclick="filterApps('utilities')">Utilities</button>
+                <button class="tab-btn active" data-filter="all" onclick="filterApps('all')">All Apps</button>
+                <button class="tab-btn" data-filter="tools" onclick="filterApps('tools')">Tools</button>
+                <button class="tab-btn" data-filter="games" onclick="filterApps('games')">Games</button>
+                <button class="tab-btn" data-filter="utilities" onclick="filterApps('utilities')">Utilities</button>
             </div>
             <div class="app-grid" id="appGrid">
                 <div class="app-card" data-category="tools">
@@ -1274,14 +1274,7 @@ def read_root():
             });
 
             searchBox.addEventListener('input', (e) => {
-                const searchTerm = e.target.value.toLowerCase();
-                const cards = document.querySelectorAll('.app-card');
-                cards.forEach(card => {
-                    const title = card.querySelector('.app-title').textContent.toLowerCase();
-                    const description = card.querySelector('.app-description').textContent.toLowerCase();
-                    const matches = title.includes(searchTerm) || description.includes(searchTerm);
-                    card.style.display = matches ? 'block' : 'none';
-                });
+                updateAppVisibility();
             });
 
             // Time converter input Enter key support
@@ -1293,18 +1286,20 @@ def read_root():
 
             function filterApps(category) {
                 currentFilter = category;
-                const cards = document.querySelectorAll('.app-card');
-                const buttons = document.querySelectorAll('.tab-btn');
-                
-                buttons.forEach(btn => btn.classList.remove('active'));
-                event.target.classList.add('active');
-                
-                cards.forEach(card => {
-                    if (category === 'all' || card.dataset.category === category) {
-                        card.style.display = 'block';
-                    } else {
-                        card.style.display = 'none';
-                    }
+                document.querySelectorAll('.tab-btn').forEach(button => {
+                    button.classList.toggle('active', button.dataset.filter === category);
+                });
+                updateAppVisibility();
+            }
+
+            function updateAppVisibility() {
+                const searchTerm = searchBox.value.trim().toLowerCase();
+                document.querySelectorAll('.app-card').forEach(card => {
+                    const title = card.querySelector('.app-title').textContent.toLowerCase();
+                    const description = card.querySelector('.app-description').textContent.toLowerCase();
+                    const matchesCategory = currentFilter === 'all' || card.dataset.category === currentFilter;
+                    const matchesSearch = title.includes(searchTerm) || description.includes(searchTerm);
+                    card.style.display = matchesCategory && matchesSearch ? '' : 'none';
                 });
             }
 
