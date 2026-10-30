@@ -153,6 +153,7 @@ def read_root():
             }
 
             .search-box {
+                display: block;
                 width: 100%;
                 max-width: 500px;
                 padding: 1rem 1.5rem;
@@ -161,7 +162,7 @@ def read_root():
                 border: 2px solid rgba(59, 130, 246, 0.3);
                 color: var(--text);
                 font-size: 1rem;
-                margin-bottom: 2rem;
+                margin: 0 auto 2rem;
                 transition: border-color 0.2s ease;
             }
 
@@ -999,13 +1000,13 @@ def read_root():
             <div class="hero-content">
                 <h1 class="brand">The Great Ace Hub</h1>
                 <p class="tagline">Your hub for amazing apps and tools. Discover, download, and create.</p>
-                <input type="text" class="search-box" id="searchBox" placeholder="Search apps...">
                 <button class="cta-button" onclick="showCalculator()">Use Calculator</button>
             </div>
         </div>
 
         <div class="apps-section">
             <h2>Featured Apps</h2>
+            <input type="text" class="search-box" id="searchBox" placeholder="Search apps...">
             <div class="tabs">
                 <button class="tab-btn active" onclick="filterApps('all', this)">All Apps</button>
                 <button class="tab-btn" onclick="filterApps('tools', this)">Tools</button>
